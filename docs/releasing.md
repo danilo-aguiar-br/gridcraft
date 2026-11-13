@@ -284,7 +284,8 @@ row in `ATTRIBUTION.md` (`cargo xtask assets`).
   `desktop-file-validate`, `appstreamcli validate`, and a Flatpak manifest check.
 - `.github/workflows/windows-arm64.yml` (on `release` pushes): packages ARM64 on x64, then
   installs, runs and uninstalls the MSI on a Windows 11 ARM64 runner.
-- `.github/workflows/freebsd.yml`: FreeBSD build + tests (manual run from `release`).
+- `.github/workflows/freebsd.yml`: FreeBSD build + tests, nightly on `main` (cron `57 2 * * *`),
+  on `release` pushes, on PRs that change the FreeBSD workflow or packaging, and by manual run.
 
 **CI and release builds.** `.github/workflows/ci.yml` runs the shared `cargo xtask ci` gate on
 every push to `main` and every pull request. Release artifacts are built on `release` pushes or

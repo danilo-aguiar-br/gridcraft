@@ -1,10 +1,10 @@
 //! Regional formats: how a region writes numbers, dates, times and money.
 //!
 //! Excel takes these from the operating system's regional settings; they are independent of the
-//! interface language and of the formula language. A [`Region`] changes what people *type* into
-//! a cell (`1.234,56`, `25/09/2026`) and what cells *show* (separators, month and day names,
-//! AM/PM, the system short and long dates). It never changes what is stored: values are numbers,
-//! and the number format codes saved in a file stay in their canonical en-US spelling.
+//! interface language and of the formula language. A workbook's [`Region`] feeds three things:
+//! how typed input is read (`1.234,56`, `25/09/2026`), how cells are displayed, and what `TEXT()`
+//! returns. It never changes what is stored: values are numbers, and the number format codes
+//! saved in a file stay in their canonical en-US spelling.
 //!
 //! [`EN_US`] is the default and reproduces GridCraft's original behaviour exactly.
 //!

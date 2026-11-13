@@ -108,6 +108,18 @@ shrinks by what a resize asks, but does not grow further.
 `null`. With an object selected, `ui.key {key: "Delete"}` (or Backspace) deletes the object
 instead of clearing cells, and Escape clears the selection.
 
+### Regions
+
+The replies of `cell.set` and `cell.get` (and `value` fields in general) carry canonical values
+whatever the workbook's region: a `.` decimal point, no group separator, and English function
+names and error codes, so a script reads the same text in every region. Only the `text` field
+of `cell.get` (the displayed text) is formatted in the workbook's region (`1.234,56` in pt-BR).
+A string `input` to `cell.set` is read as typed in that region (`1,5` in pt-BR); a JSON number
+is taken as it is.
+`app.region.set {region}` (through `engine.execute`; `tag` is an alias) switches the region,
+replies `{region}` and answers an unknown tag with an error listing the known ones; workbooks
+opened later inherit it.
+
 ### Windows
 
 Every open workbook has one or more windows; View › New Window (`view.newWindow`) adds another
