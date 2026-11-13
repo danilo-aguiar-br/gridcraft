@@ -31,6 +31,12 @@ pub(crate) fn canonical(
         let expr = formula::parse_closing_parens(body, |text| formula::parse_input(text, locale, known));
         return Ok(format!("={}", formula::print(&expr?)));
     }
+    // Portuguese VERDADEIRO and FALSO are the logical values, as TRUE and FALSE are in English.
+    if locale == FormulaLocale::Pt
+        && let Some(value) = locale.boolean_alias(body.trim())
+    {
+        return Ok(FormulaLocale::En.boolean_name(value).to_string());
+    }
     // A number typed with the formula language's decimal separator is handed on with the
     // workbook region's, which is what `cell.set` reads: Spanish formulas in an en-US workbook
     // turn `1,5` into `1.5`. Writing `.` whatever the region would make pt-BR read `1,5` as 1 May.
@@ -171,5 +177,14 @@ mod tests {
         assert!(sumifs.ends_with("(sum_range; criteria_range1; criteria1; ...)"), "{sumifs}");
         assert_eq!(description("SUMIFS", Es, Language::Es).as_deref(), Some("Adds the cells that meet every condition."));
         assert_eq!(sig("IF", En, Language::En), "IF(logical_test, [value_if_true], [value_if_false])");
+    }
+
+    /// The Portuguese interface shows Portuguese names, `;` and Portuguese help.
+    #[test]
+    fn portuguese_function_help() {
+        let pt = FormulaLocale::Pt;
+        assert_eq!(sig("se", pt, Language::PtBr), "SE(teste_lógico; [valor_se_verdadeiro]; [valor_se_falso])");
+        assert_eq!(sig("PROCV", pt, Language::PtBr), "PROCV(valor_procurado; matriz_tabela; núm_coluna; [procurar_intervalo])");
+        assert_eq!(description("SOMA", pt, Language::PtBr).as_deref(), Some("Soma todos os números informados."));
     }
 }
